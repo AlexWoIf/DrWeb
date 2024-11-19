@@ -23,7 +23,7 @@ class Database:
         return count
 
     def find(self, value):
-        keys = [key for key, val in self.current_transaction.items() 
+        keys = [key for key, val in self.current_transaction.items()
                 if val == value]
         return keys
 
