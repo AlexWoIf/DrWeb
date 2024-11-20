@@ -7,24 +7,24 @@ def test_console_set_get():
     db = Database()
     console = Console(db)
     # Mock input and output
-    sys.stdin = StringIO('SET key value\nGET key\n')
+    sys.stdin = StringIO('SET KEY VALUE\nGET KEY\n')
     sys.stdout = StringIO()
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert 'value' in output
+    assert 'VALUE' in output
 
 
 def test_console_unset():
     db = Database()
     console = Console(db)
     # Mock input and output
-    sys.stdin = StringIO('SET key value\nUNSET key\nGET key\n')
+    sys.stdin = StringIO('SET KEY VALUE\nUNSET key\nGET key\n')
     sys.stdout = StringIO()
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert NULL in output
+    assert str(NULL) in output
 
 
 def test_console_counts():
@@ -48,7 +48,7 @@ def test_console_find():
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert 'key1' in output and 'key2' in output
+    assert 'KEY1' in output and 'KEY2' in output
 
 
 def test_console_begin_rollback_commit():
@@ -61,7 +61,7 @@ def test_console_begin_rollback_commit():
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert NULL in output and 'value' in output
+    assert str(NULL) in output and 'VALUE' in output
 
 
 def test_console_invalid_command():

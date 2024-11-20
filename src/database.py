@@ -1,7 +1,12 @@
 import sys
 
 
-NULL = 'NULL'
+class _NullType(object):
+    def __repr__(self):
+        return 'NULL'
+
+
+NULL = _NullType()
 
 
 class Database:
@@ -55,12 +60,14 @@ class Console():
     def start_event_loop(self):
         while True:
             try:
-                command, *args = input('> ').split()
+                command, *args = input('> ').upper().split()
             except EOFError:
                 break
+            except ValueError:
+                continue
 
             try:
-                result = self.commands[command.upper()](*args)
+                result = self.commands[command](*args)
                 if result is None:
                     continue
                 print(result)
