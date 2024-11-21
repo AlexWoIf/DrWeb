@@ -1,5 +1,7 @@
 import pytest
-from database import Database, NULL
+
+from database import Database
+from null_type import NULL
 
 
 def test_set():
