@@ -48,7 +48,7 @@ def test_console_find():
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert 'KEY1' in output and 'KEY2' in output
+    assert 'key1' in output and 'key2' in output
 
 
 def test_console_begin_rollback_commit():
@@ -61,7 +61,7 @@ def test_console_begin_rollback_commit():
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert str(NULL) in output and 'VALUE' in output
+    assert str(NULL) in output and 'value' in output
 
 
 def test_console_invalid_command():
