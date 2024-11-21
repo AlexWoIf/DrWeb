@@ -1,5 +1,6 @@
 import sys
 from io import StringIO
+
 from console import Console
 from database import Database
 from null_type import NULL
@@ -57,13 +58,45 @@ def test_console_begin_rollback_commit():
     db = Database()
     console = Console(db)
     # Mock input and output
-    sys.stdin = StringIO('BEGIN\nSET key value\nROLLBACK\nGET key\nBEGIN\n'
-                         'SET key value\nCOMMIT\nGET key\n')
+    sys.stdin = StringIO('BEGIN\nSET key value1\nROLLBACK\nGET key\nBEGIN\n'
+                         'SET key value2\nCOMMIT\nGET key\n')
     sys.stdout = StringIO()
     console.start_event_loop()
     sys.stdout.seek(0)
     output = sys.stdout.read()
-    assert str(NULL) in output and 'value' in output
+    assert (str(NULL) in output and 
+            'value1' not in output and 
+            'value2' in output)
+
+
+def test_console_begin_commit_rollback():
+    db = Database()
+    console = Console(db)
+    # Mock input and output
+    sys.stdin = StringIO('BEGIN\nSET key value1\nCOMMIT\nGET key\nBEGIN\n'
+                         'SET key value2\nROLLBACK\nGET key\n')
+    sys.stdout = StringIO()
+    console.start_event_loop()
+    sys.stdout.seek(0)
+    output = sys.stdout.read()
+    assert (str(NULL) not in output and 
+            'value1' in output and 
+            'value2' not in output)
+
+
+def test_console_begin_rollback_rollback():
+    db = Database()
+    console = Console(db)
+    # Mock input and output
+    sys.stdin = StringIO('BEGIN\nSET key value1\nROLLBACK\nGET key\nBEGIN\n'
+                         'SET key value2\nROLLBACK\nGET key\n')
+    sys.stdout = StringIO()
+    console.start_event_loop()
+    sys.stdout.seek(0)
+    output = sys.stdout.read()
+    assert (str(NULL) in output and 
+            'value1' not in output and 
+            'value2' not in output)
 
 
 def test_console_invalid_command():
