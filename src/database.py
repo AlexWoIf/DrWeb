@@ -4,8 +4,8 @@ from null_type import NULL
 class Database:
     def __init__(self):
         self.transaction_stack = []
-        self.database = self.current_transaction = {}
-        self.transaction_stack.append(self.database)
+        self.current_transaction = {}
+        self.transaction_stack.append(self.current_transaction)
 
     def set(self, key, value):
         self.current_transaction[key] = value
@@ -41,8 +41,8 @@ class Database:
         self.transaction_stack.append(self.current_transaction)
 
     def rollback(self):
+        self.current_transaction = self.transaction_stack[-2]
         self.transaction_stack.pop()
-        self.current_transaction = self.transaction_stack[-1]
 
     def commit(self):
         self.transaction_stack[-2] = {
