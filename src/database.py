@@ -33,7 +33,8 @@ class Database:
                     continue
                 if val == value:
                     found_keys.append(key)
-                changed_keys.append(key)
+                if transaction is not self.transaction_stack[0]:
+                    changed_keys.append(key)
         return found_keys
 
     def begin(self):
