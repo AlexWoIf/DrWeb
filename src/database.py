@@ -1,12 +1,4 @@
-import sys
-
-
-class _NullType(object):
-    def __repr__(self):
-        return 'NULL'
-
-
-NULL = _NullType()
+from null_type import NULL
 
 
 class Database:
@@ -59,53 +51,3 @@ class Database:
         }
         self.transaction_stack.pop()
         self.current_transaction = self.transaction_stack[-1]
-
-
-class Console():
-    def __init__(self, db):
-        self.db = db
-        self.commands = {
-            'SET': self.db.set,
-            'GET': self.db.get,
-            'UNSET': self.db.unset,
-            'COUNTS': self.db.counts,
-            'FIND': self.db.find,
-            'BEGIN': self.db.begin,
-            'ROLLBACK': self.db.rollback,
-            'COMMIT': self.db.commit,
-            'END': sys.exit,
-        }
-
-    def start_event_loop(self):
-        while True:
-            try:
-                command, *args = input('> ').split()
-            except EOFError:
-                break
-            except ValueError:
-                continue
-
-            try:
-                result = self.commands[command.upper()](*args)
-                if result is None:
-                    continue
-                print(result)
-            except KeyError:
-                print('Invalid command')
-                continue
-            except TypeError:
-                print('Wrong number of arguments')
-                continue
-            except IndexError:
-                print('ROLLBACK or COMMIT requires a started transaction')
-                continue
-
-
-def main():
-    db = Database()
-    console = Console(db)
-    console.start_event_loop()
-
-
-if __name__ == '__main__':
-    main()

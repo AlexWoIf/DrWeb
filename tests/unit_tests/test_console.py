@@ -1,6 +1,8 @@
 import sys
 from io import StringIO
-from database import Database, Console, NULL
+from console import Console
+from database import Database
+from null_type import NULL
 
 
 def test_console_set_get():
